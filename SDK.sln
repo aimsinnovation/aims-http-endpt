@@ -1,9 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aims.FileCountAgent", "Aims.FileCountAgent\Aims.FileCountAgent.csproj", "{9FFF71F9-012B-48E0-827F-A8E58569E821}"
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aims.EndpointAgent", "Aims.EndpointAgent\Aims.EndpointAgent.csproj", "{9FFF71F9-012B-48E0-827F-A8E58569E821}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aims.Sdk", "Aims.Sdk\Aims.Sdk.csproj", "{5170FBD5-E775-47CD-A1B7-0BE61B73EFEB}"
 EndProject
@@ -15,6 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B6D3B8
 	EndProjectSection
 EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = AimsForBiztalk.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -31,8 +32,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = AimsForBiztalk.vsmdi
 	EndGlobalSection
 EndGlobal

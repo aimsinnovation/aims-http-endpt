@@ -1,25 +1,26 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
     xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
-  <Product Name='File Count Agent 1.0' Id='9514BE5B-9523-40B1-8208-6556C6022BA0' UpgradeCode='9489E3C4-00D0-421F-9776-516FC262A963'
+  <Product Name='HTTP Endpoints Activity Agent 1.0' Id='9514BE5B-9523-40B1-8208-6556C6022BA0' UpgradeCode='9489E3C4-00D0-421F-9776-516FC262A963'
       Language='1033' Codepage='1252' Version='1.0.0' Manufacturer='AIMS Innovation'>
     <Package Id='*' Keywords='Installer'
-        Description="File Count Agent 1.0 Installer"
+        Description="HTTP Endpoints Activity Agent 1.0 Installer"
         Manufacturer='AIMS Innovation'
         InstallerVersion='200' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
 
     <Media Id='1' Cabinet='Main.cab' EmbedCab='yes' DiskPrompt="CD-ROM #1" />
-    <Property Id='DiskPrompt' Value="File Count Agent 1.0 Installation [1]" />
+    <Property Id='DiskPrompt' Value="HTTP Endpoints Activity Agent 1.0 Installation [1]" />
 
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
 
-    <Property Id="AIMS_AGENT_ID" Secure="yes" Value="aims.filecnt" />
+    <Property Id="AIMS_AGENT_ID" Secure="yes" Value="aims.http-endpt" />
     <Property Id="AIMS_AGENT_VERSION" Secure="yes" Value="v1.0" />
     <Property Id="AIMS_SERVICE_ACCOUNT_VALID" Secure="yes" />
     <Property Id="AIMS_SERVICE_USER" Secure="yes" />
     <Property Id="AIMS_SERVICE_PASSWORD" Secure="yes" />
     <Property Id="AIMS_EMAIL" Secure="yes" />
     <Property Id="AIMS_PASSWORD" Secure="yes" />
+    <Property Id="AIMS_PING_TIME" Secure="yes" Value="60" />
     <Property Id="AIMS_API_ENDPOINT" Secure="yes" Value="https://api.aimsinnovation.com">
       <RegistrySearch Id="ApiEndpointRegistrySearch" Root="HKLM" Key="Software\[Manufacturer]\[ProductName]"
           Name="ApiEndpoint" Type="raw" />
@@ -36,9 +37,9 @@
     <Property Id="AIMS_SYSTEM_NAME" Secure="yes" />
     <Property Id="AIMS_API_ERROR" Secure="yes" />
     <Property Id="AIMS_ERROR" Secure="yes" />
-    <Property Id="AIMS_PATHS" Secure="yes" />
-    <Property Id="AIMS_PATHS_MULTILINE" Secure="yes" />
-    <Property Id="AIMS_PATHS_VALID" Secure="yes" />
+    <Property Id="AIMS_ENDPOINTS" Secure="yes" />
+    <Property Id="AIMS_ENDPOINTS_MULTILINE" Secure="yes" />
+    <Property Id="AIMS_ENDPOINTS_VALID" Secure="yes" />
 
     <EnsureTable Id="ListBox" />
 
@@ -76,37 +77,40 @@
     <Directory Id='TARGETDIR' Name='SourceDir'>
       <Directory Id='ProgramFilesFolder' Name='PFiles'>
         <Directory Id='AIMS Innovation' Name='AIMS Innovation'>
-          <Directory Id='INSTALLDIR' Name='File Count Agent 1.0'>
+          <Directory Id='INSTALLDIR' Name='HTTP Endpoint Activity Agent 1.0'>
             <Component Id='MainExecutable' Guid='5A9566A2-C684-49BC-82D3-BD333D287E31'>
-              <File Id='FileCntAgentExe' Name='aims-filecnt-agent.exe' DiskId='1'
-                  Source='$(var.Aims.FileCountAgent.TargetPath)' KeyPath='yes' />
-              <File Id='FileCntAgentExeConfig' Name='aims-filecnt-agent.exe.config' DiskId='1'
-                  Source='$(var.Aims.FileCountAgent.TargetPath).config' />
-              <util:XmlFile Id="FileCntAgentExeConfigSetSetting1" File="[#FileCntAgentExeConfig]"
+              <File Id='EndpointAgentExe' Name='aims-http-endpt-agent.exe' DiskId='1'
+                  Source='$(var.Aims.EndpointAgent.TargetPath)' KeyPath='yes' />
+              <File Id='EndpointAgentExeConfig' Name='aims-http-endpt-agent.exe.config' DiskId='1'
+                  Source='$(var.Aims.EndpointAgent.TargetPath).config' />
+              <util:XmlFile Id="EndpointAgentExeConfigSetSetting1" File="[#EndpointAgentExeConfig]"
                   Action="setValue" Name="value" SelectionLanguage="XPath" Permanent="yes" Sequence="1"
                   ElementPath="//appSettings/add[\[]@key='api-endpoint'[\]]" Value="[AIMS_API_ENDPOINT]/api/" />
-              <util:XmlFile Id="FileCntAgentExeConfigSetSetting2" File="[#FileCntAgentExeConfig]"
+              <util:XmlFile Id="EndpointAgentExeConfigSetSetting2" File="[#EndpointAgentExeConfig]"
                   Action="setValue" Name="value" SelectionLanguage="XPath" Permanent="yes" Sequence="2"
                   ElementPath="//appSettings/add[\[]@key='environment-id'[\]]" Value="[AIMS_ENVIRONMENT_ID]" />
-              <util:XmlFile Id="FileCntAgentExeConfigSetSetting3" File="[#FileCntAgentExeConfig]"
+              <util:XmlFile Id="EndpointAgentExeConfigSetSetting3" File="[#EndpointAgentExeConfig]"
                   Action="setValue" Name="value" SelectionLanguage="XPath" Permanent="yes" Sequence="3"
                   ElementPath="//appSettings/add[\[]@key='token'[\]]" Value="[AIMS_API_TOKEN]" />
-              <util:XmlFile Id="FileCntAgentExeConfigSetSetting4" File="[#FileCntAgentExeConfig]"
+              <util:XmlFile Id="EndpointAgentExeConfigSetSetting4" File="[#EndpointAgentExeConfig]"
                   Action="setValue" Name="value" SelectionLanguage="XPath" Permanent="yes" Sequence="4"
-                  ElementPath="//appSettings/add[\[]@key='file-paths'[\]]" Value="[AIMS_PATHS]" />
+                  ElementPath="//appSettings/add[\[]@key='endpoints'[\]]" Value="[AIMS_ENDPOINTS]" />
+              <util:XmlFile Id="EndpointAgentExeConfigSetSetting5" File="[#EndpointAgentExeConfig]"
+                  Action="setValue" Name="value" SelectionLanguage="XPath" Permanent="yes" Sequence="5"
+                  ElementPath="//appSettings/add[\[]@key='ping-time'[\]]" Value="[AIMS_PING_TIME]" />
               <File Id='AimsSdkDll' Name='Aims.Sdk.dll' DiskId='1'
-                  Source='$(var.Aims.FileCountAgent.TargetDir)\Aims.Sdk.dll' />
+                  Source='$(var.Aims.EndpointAgent.TargetDir)\Aims.Sdk.dll' />
               <File Id='NewtonsoftJsonDll' Name='Newtonsoft.Json.dll' DiskId='1'
-                  Source='$(var.Aims.FileCountAgent.TargetDir)\Newtonsoft.Json.dll' />
+                  Source='$(var.Aims.EndpointAgent.TargetDir)\Newtonsoft.Json.dll' />
               <RegistryValue Id='ApiTokenRegistryValue' Root='HKLM' Key='Software\[Manufacturer]\[ProductName]'
                   Name='ApiToken' Value='[AIMS_API_TOKEN]' Type='string' />
               <RegistryValue Id='ApiEndpointRegistryValue' Root='HKLM' Key='Software\[Manufacturer]\[ProductName]'
                   Name='ApiEndpoint' Value='[AIMS_API_ENDPOINT]' Type='string' />
-              <ServiceInstall Id="FileCntAgentServiceInstaller" Type="ownProcess"
-                  Name="aims-filecnt-agent" DisplayName="AIMS File Count Agent"
+              <ServiceInstall Id="EndpointAgentServiceInstaller" Type="ownProcess"
+                  Name="aims-http-endpt-agent" DisplayName="AIMS HTTP Endpoints Agent"
                   Start="auto" Account="[AIMS_SERVICE_USER]" Password="[AIMS_SERVICE_PASSWORD]"
                   ErrorControl="normal" Vital="yes" />
-              <ServiceControl Id="FileCntAgentServiceStart" Name="aims-filecnt-agent"
+              <ServiceControl Id="EndpointAgentServiceStart" Name="aims-http-endpt-agent"
                   Start="install" Stop="uninstall" Remove="uninstall" Wait="yes" />
             </Component>
           </Directory>
@@ -114,7 +118,7 @@
       </Directory>
     </Directory>
 
-    <Feature Id='Complete' Title='File Count Agent 1.0' Description='The complete package.'
+    <Feature Id='Complete' Title='HTTP Endpoints Activity Agent 1.0' Description='The complete package.'
         Display='expand' Level='1' ConfigurableDirectory='INSTALLDIR'>
       <Feature Id='MainProgram' Title='Program' Description='The main executable.' Level='1'>
         <ComponentRef Id='MainExecutable' />

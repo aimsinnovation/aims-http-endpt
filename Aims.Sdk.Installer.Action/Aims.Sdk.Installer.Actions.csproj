@@ -53,7 +53,7 @@
     <Compile Include="UiActions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\sdk\Aims.Sdk\Aims.Sdk.csproj">
+    <ProjectReference Include="..\Aims.Sdk\Aims.Sdk.csproj">
       <Project>{5170FBD5-E775-47CD-A1B7-0BE61B73EFEB}</Project>
       <Name>Aims.Sdk</Name>
     </ProjectReference>

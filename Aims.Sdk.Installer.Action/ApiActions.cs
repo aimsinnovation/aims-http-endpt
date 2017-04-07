@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using Newtonsoft.Json;
@@ -48,6 +49,7 @@ namespace Aims.Sdk.Installer.Actions
                 session.Log("Begin GetToken");
 
                 Api api = GetApi(session);
+
                 try
                 {
                     var system = JsonConvert.DeserializeObject<System>(session["AIMS_SYSTEM"]);

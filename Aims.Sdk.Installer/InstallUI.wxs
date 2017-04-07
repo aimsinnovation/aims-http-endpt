@@ -61,7 +61,7 @@
 
       <Publish Dialog="PathsDialog" Control="Back" Event="NewDialog" Value="UserLogonDialog">1</Publish>
       <Publish Dialog="PathsDialog" Control="Next" Event="DoAction" Value="ValidatePaths" Order="1">1</Publish>
-      <Publish Dialog="PathsDialog" Control="Next" Event="NewDialog" Value="SummaryDialog" Order="2"><![CDATA[AIMS_PATHS<>"" AND AIMS_PATHS_VALID="1"]]></Publish>
+      <Publish Dialog="PathsDialog" Control="Next" Event="NewDialog" Value="SummaryDialog" Order="2"><![CDATA[AIMS_ENDPOINTS<>"" AND AIMS_ENDPOINTS_VALID="1"]]></Publish>
 
       <Publish Dialog="SummaryDialog" Control="Back" Event="NewDialog" Value="PathsDialog" Order="1">1</Publish>
       <Publish Dialog="SummaryDialog" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="2" >1</Publish>

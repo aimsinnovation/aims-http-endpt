@@ -6,7 +6,7 @@ using System.Reflection;
 using System.ServiceProcess;
 using System.Threading;
 
-namespace Aims.FileCountAgent
+namespace Aims.EndpointAgent
 {
     internal static class Program
     {

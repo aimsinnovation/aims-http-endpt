@@ -3,7 +3,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Aims.FileCountAgent
+namespace Aims.EndpointAgent
 {
     public static class Config
     {
@@ -23,9 +23,21 @@ namespace Aims.FileCountAgent
             }
         }
 
-        public static string[] FilePaths
+        public static int PingTime
         {
-            get { return ParsePaths(ConfigurationManager.AppSettings["file-paths"]); }
+            get
+            {
+                int value;
+                if (!Int32.TryParse(ConfigurationManager.AppSettings["ping-time"], out value))
+                    throw new FormatException("'ping-time' setting has invalid format.");
+
+                return value;
+            }
+        }
+
+        public static string[] Endpoints
+        {
+            get { return ParsePaths(ConfigurationManager.AppSettings["endpoints"]); }
         }
 
         public static string Token

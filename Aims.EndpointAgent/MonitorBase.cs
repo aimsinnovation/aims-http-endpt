@@ -2,13 +2,13 @@
 using System.Diagnostics;
 using System.Threading;
 
-namespace Aims.FileCountAgent
+namespace Aims.EndpointAgent
 {
     public abstract class MonitorBase<T> : IDisposable
     {
         private readonly int _intervalMilliseconds;
 
-        private bool _isRunning = true;
+        protected bool _isRunning = true;
 
         protected MonitorBase(int intervalMilliseconds, bool manualStart = false)
         {
@@ -29,13 +29,13 @@ namespace Aims.FileCountAgent
 
         protected abstract void Send(T[] items);
 
-        protected void Start()
+        protected virtual void Start()
         {
             var thread = new Thread(Run) { IsBackground = true };
             thread.Start();
         }
 
-        private void Run()
+        protected void Run()
         {
             var stopwatch = new Stopwatch();
             while (_isRunning)

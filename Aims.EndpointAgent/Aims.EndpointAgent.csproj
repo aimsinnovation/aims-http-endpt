@@ -7,8 +7,8 @@
     <ProjectGuid>{9FFF71F9-012B-48E0-827F-A8E58569E821}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Aims.FileCountAgent</RootNamespace>
-    <AssemblyName>aims-filecnt-agent</AssemblyName>
+    <RootNamespace>Aims.EndpointAgent</RootNamespace>
+    <AssemblyName>aims-http-endpt-agent</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -51,14 +51,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StatisticsMonitor.cs" />
-    <Compile Include="StatisticsMonitor.Watcher.cs">
-      <DependentUpon>StatisticsMonitor.cs</DependentUpon>
-    </Compile>
     <Compile Include="TopologyMonitor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aims.Sdk\Aims.Sdk.csproj">

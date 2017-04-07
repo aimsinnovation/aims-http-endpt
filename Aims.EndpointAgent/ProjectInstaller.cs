@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 
-namespace Aims.FileCountAgent
+namespace Aims.EndpointAgent
 {
     [RunInstaller(true)]
     public class ProjectInstaller : Installer
