@@ -57,7 +57,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TopologyMonitor.cs" />
+    <Compile Include="EndpointAgent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
