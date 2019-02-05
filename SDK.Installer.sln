@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aims.EndpointAgent", "Aims.EndpointAgent\Aims.EndpointAgent.csproj", "{9FFF71F9-012B-48E0-827F-A8E58569E821}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aims.Sdk", "Aims.Sdk\Aims.Sdk.csproj", "{5170FBD5-E775-47CD-A1B7-0BE61B73EFEB}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Aims.Sdk.Installer", "Aims.Sdk.Installer\Aims.Sdk.Installer.wixproj", "{C213D3CF-238D-4904-A497-65AFD03AC731}"
 EndProject
@@ -28,10 +26,6 @@ Global
 		{9FFF71F9-012B-48E0-827F-A8E58569E821}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FFF71F9-012B-48E0-827F-A8E58569E821}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FFF71F9-012B-48E0-827F-A8E58569E821}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5170FBD5-E775-47CD-A1B7-0BE61B73EFEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5170FBD5-E775-47CD-A1B7-0BE61B73EFEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5170FBD5-E775-47CD-A1B7-0BE61B73EFEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5170FBD5-E775-47CD-A1B7-0BE61B73EFEB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C213D3CF-238D-4904-A497-65AFD03AC731}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{C213D3CF-238D-4904-A497-65AFD03AC731}.Debug|Any CPU.Build.0 = Debug|x86
 		{C213D3CF-238D-4904-A497-65AFD03AC731}.Release|Any CPU.ActiveCfg = Release|x86
@@ -43,6 +37,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {152A7BE7-1D1C-423D-BAB5-81F6D03238BF}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = AimsForBiztalk.vsmdi
