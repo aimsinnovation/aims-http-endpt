@@ -46,9 +46,12 @@
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agent.cs" />
+    <Compile Include="AgentConfigurationModel.cs" />
+    <Compile Include="AgentConfigurationReaderWriter.cs" />
     <Compile Include="AgentConstants.cs" />
     <Compile Include="AgentService.cs">
       <SubType>Component</SubType>

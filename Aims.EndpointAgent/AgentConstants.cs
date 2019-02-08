@@ -2,6 +2,11 @@
 {
     public static class AgentConstants
     {
+        public static class ConfigParameters
+        {
+            public const string PathToConfig = "AgentConfig.json";
+        }
+
         public static class NodeRefPart
         {
             public const string Endpoint = "endpoint";
@@ -28,7 +33,6 @@
             public const string Status3xx = "aims.http-endpt.status-3xx";
             public const string Status4xx = "aims.http-endpt.status-4xx";
             public const string Status5xx = "aims.http-endpt.status-5xx";
-
         }
     }
 }
