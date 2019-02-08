@@ -14,8 +14,8 @@ namespace Aims.EndpointAgent
         public AgentService()
         {
             InitializeComponent();
-
             _eventLog = new EventLog(AgentConstants.Service.Log) { Source = AgentConstants.Service.EventSource };
+            Config.UseJsonSource();
         }
 
         internal void Start()
