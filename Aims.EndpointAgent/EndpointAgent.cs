@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 using Aims.Sdk;
 
 namespace Aims.EndpointAgent
@@ -40,11 +41,11 @@ namespace Aims.EndpointAgent
         protected override void Start()
         {
             base.Start();
-        
+            List<Task> statusCheckers = new List<Task>();
             for (int i = 0; i < _nodes.Length; i++)
             {
-                _workerThreads[i] = new Thread(CheckStatus);
-                _workerThreads[i].Start(i);
+                int nodeIndex = i;
+                statusCheckers.Add(Task.Run(() => CheckStatus(nodeIndex)));
             }
         }
 
@@ -62,7 +63,7 @@ namespace Aims.EndpointAgent
         {
             var stopwatch = new Stopwatch();
             string endpoint;
-            int ix = (int) index;
+            int ix = (int)index;
 
             lock (_nodes)
             {
@@ -92,7 +93,7 @@ namespace Aims.EndpointAgent
                 }
 
                 long timeout = _collectionTime - stopwatch.ElapsedMilliseconds;
-                Thread.Sleep(timeout > 0 ? (int)timeout : 0);                
+                Thread.Sleep(timeout > 0 ? (int)timeout : 0);
             }
         }
 
