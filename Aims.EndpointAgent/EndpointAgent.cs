@@ -15,15 +15,15 @@ namespace Aims.EndpointAgent
         private readonly EventLog _eventLog;
         private readonly int _collectionTime;
         private readonly Node[] _nodes;
-        private readonly Thread[] _workerThreads;
+        private readonly bool _verboseLog;
 
-        public EndpointAgent(EnvironmentApi api, NodeRef[] nodeRefs, int collectionTime, EventLog eventLog)
+        public EndpointAgent(EnvironmentApi api, NodeRef[] nodeRefs, int collectionTime, EventLog eventLog, bool verboseLog)
             : base(collectionTime, true)
         {
             _api = api;
             _collectionTime = collectionTime;
             _eventLog = eventLog;
-            _workerThreads = new Thread[nodeRefs.Length];
+            _verboseLog = verboseLog;
             _nodes = nodeRefs
                 .Select(r => new Node
                 {
@@ -38,11 +38,11 @@ namespace Aims.EndpointAgent
             Start();
         }
 
-        protected override void Start()
+        protected sealed override void Start()
         {
             base.Start();
-            List<Task> statusCheckers = new List<Task>();
-            for (int i = 0; i < _nodes.Length; i++)
+            var statusCheckers = new List<Task>();
+            for (var i = 0; i < _nodes.Length; i++)
             {
                 int nodeIndex = i;
                 statusCheckers.Add(Task.Run(() => CheckStatus(nodeIndex)));
@@ -85,7 +85,7 @@ namespace Aims.EndpointAgent
                 }
                 catch (Exception ex)
                 {
-                    if (Config.VerboseLog)
+                    if (_verboseLog)
                     {
                         _eventLog.WriteEntry(String.Format("An error occurred while trying to ping endpoint {1}: {0}",
                                                            ex, endpoint), EventLogEntryType.Error);
@@ -143,7 +143,7 @@ namespace Aims.EndpointAgent
             }
             catch (Exception ex)
             {
-                if (Config.VerboseLog)
+                if (_verboseLog)
                 {
                     _eventLog.WriteEntry(String.Format("An error occurred while trying to send topology: {0}", ex),
                         EventLogEntryType.Error);

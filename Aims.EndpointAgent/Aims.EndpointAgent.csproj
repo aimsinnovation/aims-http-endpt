@@ -50,13 +50,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agent.cs" />
-    <Compile Include="AgentConfigurationModel.cs" />
-    <Compile Include="AgentConfigurationReaderWriter.cs" />
+    <Compile Include="Configuration\AuthenticationEntry.cs" />
+    <Compile Include="Configuration\Configuration.cs" />
+    <Compile Include="AgentConfigurationReader.cs" />
     <Compile Include="AgentConstants.cs" />
     <Compile Include="AgentService.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Configuration\BasicAuthenticationEntry.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Configuration\EndpointEntry.cs" />
     <Compile Include="MonitorBase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">
@@ -64,6 +67,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EndpointAgent.cs" />
+    <Compile Include="Configuration\SystemEntry.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
