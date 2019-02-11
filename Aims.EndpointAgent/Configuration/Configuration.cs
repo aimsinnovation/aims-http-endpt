@@ -19,7 +19,7 @@ namespace Aims.EndpointAgent.Configuration
         public List<SystemEntry> Systems { get; set; }
 
         [JsonProperty("ping-time", Required = Required.DisallowNull)]
-        public int PingTime { get; set; }
+        public int PingTime { get; set; } = 60;
 
         [JsonProperty("verbose-log", Required = Required.DisallowNull)]
         public bool VerboseLog { get; set; }
