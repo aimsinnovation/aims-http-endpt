@@ -45,6 +45,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
@@ -58,8 +59,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Configuration\BasicAuthenticationEntry.cs" />
-    <Compile Include="Config.cs" />
     <Compile Include="Configuration\EndpointEntry.cs" />
+    <Compile Include="Configuration\StringExtensions.cs" />
     <Compile Include="MonitorBase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">

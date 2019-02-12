@@ -87,8 +87,7 @@ namespace Aims.EndpointAgent
                 {
                     if (_verboseLog)
                     {
-                        _eventLog.WriteEntry(String.Format("An error occurred while trying to ping endpoint {1}: {0}",
-                                                           ex, endpoint), EventLogEntryType.Error);
+                        _eventLog.WriteEntry($"An error occurred while trying to ping endpoint {endpoint}: {ex}", EventLogEntryType.Error);
                     }
                 }
 
@@ -145,8 +144,7 @@ namespace Aims.EndpointAgent
             {
                 if (_verboseLog)
                 {
-                    _eventLog.WriteEntry(String.Format("An error occurred while trying to send topology: {0}", ex),
-                        EventLogEntryType.Error);
+                    _eventLog.WriteEntry($"An error occurred while trying to send topology: {ex}", EventLogEntryType.Error);
                 }
             }
         }

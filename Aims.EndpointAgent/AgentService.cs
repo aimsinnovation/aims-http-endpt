@@ -38,8 +38,10 @@ namespace Aims.EndpointAgent
             {
                 try
                 {
-                    var config = new Config();
-                    var agents = config.Root.Systems.Select(
+                    var config =
+                        new AgentConfigurationReader<Configuration.Configuration>(AgentConstants.ConfigParameters
+                            .PathToConfig).Json;
+                    var agents = config.Systems.Select(
                         system => new Agent(config, system,_eventLog));
                     DisposeAgents();
                     _agents = agents;

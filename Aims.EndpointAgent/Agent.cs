@@ -11,9 +11,9 @@ namespace Aims.EndpointAgent
     {
         private readonly EndpointAgent _endpointAgent;
 
-        public Agent(Config config, SystemEntry system, EventLog eventLog)
+        public Agent(Configuration.Configuration config, SystemEntry system, EventLog eventLog)
         {
-            var api = new Api(config.Root.ApiEndpoint, system.Token).ForEnvironment(config.Root.Environment);
+            var api = new Api(config.ApiEndpoint, system.Token).ForEnvironment(config.Environment);
             var nodeRefs = system.Endpoints
                 .Select(p => new NodeRef
                 {
@@ -22,7 +22,7 @@ namespace Aims.EndpointAgent
                 })
                 .ToArray();
 
-            _endpointAgent = new EndpointAgent(api, nodeRefs, config.Root.PingTime * 1000, eventLog, config.Root.VerboseLog);
+            _endpointAgent = new EndpointAgent(api, nodeRefs, config.PingTime * 1000, eventLog, config.VerboseLog);
         }
 
         public void Dispose()
