@@ -1,0 +1,187 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "http://example.com/root.json",
+	"type": "object",
+	"title": "AIMS HTTP agent configuration schema",
+	"required": [
+		"endpoint",
+		"environment",
+		"systems"
+	],
+	"properties": {
+		"endpoint": {
+			"$id": "#/properties/endpoint",
+			"type": "string",
+			"title": "The AIMS endpoint Schema",
+			"description": "The AIMS endpoint URI",
+			"default": "https://api.aimsinnovation.com/api/",
+			"examples": [
+				"https://api.aimsinnovation.com/api/"
+			],
+			"format": "uri"
+		},
+		"environment": {
+			"$id": "#/properties/environment",
+			"type": "string",
+			"title": "The Environment Schema",
+			"description": "The AIMS environment",
+			"default": "",
+			"examples": [
+				"43FDBCCA-E880-46D5-AE29-729481F19D51"
+			],
+			"pattern": "^(\\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\\}{0,1})$"
+		},
+		"authentication": {
+			"$id": "#/properties/authentication",
+			"type": "object",
+			"title": "The Authentication Schema",
+			"description": "Optional authentication mechanisms",
+			"required": [
+				"basic"
+			],
+			"properties": {
+				"basic": {
+					"$id": "#/properties/authentication/properties/basic",
+					"type": "array",
+					"description": "Basic authentication",
+					"title": "The Basic Schema",
+					"minItems": 1,
+					"items": {
+						"$id": "#/properties/authentication/properties/basic/items",
+						"type": "object",
+						"title": "The Items Schema",
+						"required": [
+							"name",
+							"login",
+							"password"
+						],
+						"properties": {
+							"name": {
+								"$id": "#/properties/authentication/properties/basic/items/properties/name",
+								"type": "string",
+								"title": "The Name Schema",
+								"description": "Internal name",
+								"default": "",
+								"examples": [
+									"sample"
+								],
+								"pattern": "^(.*)$"
+							},
+							"login": {
+								"$id": "#/properties/authentication/properties/basic/items/properties/login",
+								"type": "string",
+								"title": "The Login Schema",
+								"description": "HTTP login",
+								"default": "",
+								"examples": [
+									"username"
+								],
+								"pattern": "^(.*)$"
+							},
+							"password": {
+								"$id": "#/properties/authentication/properties/basic/items/properties/password",
+								"type": "string",
+								"description": "HTTP password",
+								"title": "The Password Schema",
+								"default": "",
+								"examples": [
+									"password"
+								],
+								"pattern": "^(.*)$"
+							}
+						}
+					}
+				}
+			}
+		},
+		"systems": {
+			"$id": "#/properties/systems",
+			"type": "array",
+			"title": "The Systems Schema",
+			"description": "The AIMS systems",
+			"items": {
+				"$id": "#/properties/systems/items",
+				"type": "object",
+				"title": "The Items Schema",
+				"required": [
+					"name",
+					"endpoints"
+				],
+				"properties": {
+					"name": {
+						"$id": "#/properties/systems/items/properties/name",
+						"type": "string",
+						"title": "The Name Schema",
+						"description": "System name",
+						"default": "",
+						"examples": [
+							"sample system"
+						],
+						"pattern": "^(.*)$"
+					},
+					"endpoints": {
+						"$id": "#/properties/systems/items/properties/endpoints",
+						"type": "array",
+						"title": "The Endpoints Schema",
+						"description": "Endpoints connected to the system",
+						"items": {
+							"$id": "#/properties/systems/items/properties/endpoints/items",
+							"type": "object",
+							"title": "The Items Schema",
+							"required": [
+								"endpoint"
+							],
+							"properties": {
+								"endpoint": {
+									"$id": "#/properties/systems/items/properties/endpoints/items/properties/endpoint",
+									"type": "string",
+									"title": "The Endpoint Schema",
+									"description": "Endpoint URL",
+									"default": "",
+									"examples": [
+										"https://some.url"
+									],
+									"pattern": "^(.*)$",
+									"format": "uri"
+								},
+								"authentication": {
+									"$id": "#/properties/systems/items/properties/endpoints/items/properties/authentication",
+									"type": "string",
+									"title": "The authentication $ref Schema",
+									"description": "Optional authentication reference",
+									"default": "",
+									"examples": [
+										"#/authentication/0"
+									],
+									"pattern": "^#/authentication/basic/([0-9]+)$",
+									"format": "json-pointer"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"ping-time": {
+			"$id": "#/properties/ping-time",
+			"type": "integer",
+			"title": "The Ping-time Schema",
+			"description": "Optional ping timeout",
+			"default": 0,
+			"examples": [
+				60
+			]
+		},
+		"verbose-log": {
+			"$id": "#/properties/verbose-log",
+			"type": "boolean",
+			"title": "The Verbose-log Schema",
+			"description": "Optional verbose logs",
+			"default": false,
+			"examples": [
+				false
+			]
+		}
+	}
+}
