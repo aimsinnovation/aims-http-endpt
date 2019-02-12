@@ -1,10 +1,13 @@
-﻿namespace Aims.EndpointAgent
+﻿using System;
+
+namespace Aims.EndpointAgent
 {
     public static class AgentConstants
     {
         public static class ConfigParameters
         {
-            public const string PathToConfig = "AgentConfig.json";
+            public static readonly string PathToConfig = 
+                $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\aims\\httpagent\\agent.config";
         }
 
         public static class NodeRefPart

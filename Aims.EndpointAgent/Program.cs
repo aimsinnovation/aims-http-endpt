@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Configuration.Install;
 using System.Linq;
 using System.Reflection;
@@ -14,9 +13,7 @@ namespace Aims.EndpointAgent
         {
             using (var installer = new ProjectInstaller())
             {
-                installer.Context = new InstallContext("",
-                    new[] { String.Format("/assemblypath={0}", Assembly.GetExecutingAssembly().Location) });
-
+                installer.Context = new InstallContext("", new[] {$"/assemblypath={Assembly.GetExecutingAssembly().Location}"});
                 installer.Install(new Hashtable());
             }
         }
@@ -36,7 +33,7 @@ namespace Aims.EndpointAgent
             if (args.Contains("/console"))
             {
                 service.Start();
-                Thread.Sleep(-1);
+                Thread.Sleep(Timeout.Infinite);
             }
             else
             {
