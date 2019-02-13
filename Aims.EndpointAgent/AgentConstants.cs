@@ -7,7 +7,7 @@ namespace Aims.EndpointAgent
         public static class ConfigParameters
         {
             public static readonly string PathToConfig = 
-                $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\aims\\httpagent\\agent.config";
+                $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\aims\\httpagent\\agent.config";
         }
 
         public static class NodeRefPart
