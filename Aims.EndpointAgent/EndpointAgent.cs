@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace Aims.EndpointAgent
         private readonly int _collectionTime;
         private readonly Node[] _nodes;
         private readonly bool _verboseLog;
+        private readonly BlockingCollection<StatPoint> _statCollection = new BlockingCollection<StatPoint>();
 
         public EndpointAgent(EnvironmentApi api, NodeRef[] nodeRefs, int collectionTime, EventLog eventLog, bool verboseLog)
             : base(collectionTime, true)
@@ -64,10 +66,12 @@ namespace Aims.EndpointAgent
             var stopwatch = new Stopwatch();
             string endpoint;
             int ix = (int)index;
+            NodeRef noderefForStatPoint;
 
             lock (_nodes)
             {
                 endpoint = _nodes[ix].Name;
+                noderefForStatPoint = _nodes[ix].NodeRef;
             }
 
             while (_isRunning)
@@ -76,7 +80,12 @@ namespace Aims.EndpointAgent
 
                 try
                 {
+                    Stopwatch requestTime = new Stopwatch();
+                    requestTime.Start();
                     string status = GetEndpointStatus(endpoint);
+                    requestTime.Stop();
+                    _statCollection.Add(makeStatPoint(noderefForStatPoint, requestTime.ElapsedMilliseconds, AgentConstants.StatType.RequestTime));
+
                     lock (_nodes)
                     {
                         _nodes[ix].ModificationTime = DateTimeOffset.UtcNow;
@@ -94,6 +103,11 @@ namespace Aims.EndpointAgent
                 long timeout = _collectionTime - stopwatch.ElapsedMilliseconds;
                 Thread.Sleep(timeout > 0 ? (int)timeout : 0);
             }
+        }
+
+        private StatPoint makeStatPoint(NodeRef noderef, long time, string statType)
+        {
+            return new StatPoint() { NodeRef = noderef, StatType = statType, Time = DateTimeOffset.Now, Value = time };
         }
 
         private static string GetEndpointStatus(string endpoint)
@@ -139,6 +153,10 @@ namespace Aims.EndpointAgent
             try
             {
                 _api.Nodes.Send(items);
+                while (_statCollection.Count > 0)
+                {
+                    _api.StatPoints.Send(new[] { _statCollection.Take() });
+                }
             }
             catch (Exception ex)
             {

@@ -6,7 +6,7 @@ namespace Aims.EndpointAgent
     {
         public static class ConfigParameters
         {
-            public static readonly string PathToConfig = 
+            public static readonly string PathToConfig =
                 $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\aims\\httpagent\\agent.config";
         }
 
@@ -18,6 +18,11 @@ namespace Aims.EndpointAgent
         public static class NodeType
         {
             public const string Endpoint = "aims.http-endpt.endpoint";
+        }
+
+        public static class StatType
+        {
+            public const string RequestTime = "aims.http-endpt.requesttime";
         }
 
         public static class Service
