@@ -42,10 +42,8 @@ function ResolveReferences ([object]$json, [object]$sub) {
                 $referenced = $_.Value.'$ref'.Replace("#/","").split("/") | ForEach-Object {$accumulator = $json} { 
                     if ($_ -match "^\d+$") { $accumulator = $accumulator[$_] } else { $accumulator = $accumulator.$_ } } { $accumulator }
                 if ($null -eq $referenced) {
-                    [string]$message = "Invalid reference: {0}" -f $_.Value.'$ref'
-                    throw $message
+                    throw "Invalid reference: {0}" -f $_.Value.'$ref'
                 }
-                $_.Value = $referenced
             }
         } elseif ($_.TypeNameOfValue -eq 'System.Object[]') {
             $_.Value | ForEach-Object { ResolveReferences -json $json -sub $_}

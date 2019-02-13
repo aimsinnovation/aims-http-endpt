@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
     xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
-  <Product Name='HTTP Endpoints Activity Agent 1.0' Id='9514BE5B-9523-40B1-8208-6556C6022BA0' UpgradeCode='9489E3C4-00D0-421F-9776-516FC262A963'
+  <Product Name='HTTP Endpoints Activity Agent' Id='9514BE5B-9523-40B1-8208-6556C6022BA0' UpgradeCode='9489E3C4-00D0-421F-9776-516FC262A963'
       Language='1033' Codepage='1252' Version='1.0.0' Manufacturer='AIMS Innovation'>
     <Package Id='*' Keywords='Installer'
         Description="HTTP Endpoints Activity Agent 1.0 Installer"
@@ -102,6 +102,7 @@
                   Source='$(var.Aims.EndpointAgent.TargetDir)\Aims.Sdk.dll' />
               <File Id='NewtonsoftJsonDll' Name='Newtonsoft.Json.dll' DiskId='1'
                   Source='$(var.Aims.EndpointAgent.TargetDir)\Newtonsoft.Json.dll' />
+              <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="[INSTALLDIR]" KeyPath="yes"/>
               <RegistryValue Id='ApiTokenRegistryValue' Root='HKLM' Key='Software\[Manufacturer]\[ProductName]'
                   Name='ApiToken' Value='[AIMS_API_TOKEN]' Type='string' />
               <RegistryValue Id='ApiEndpointRegistryValue' Root='HKLM' Key='Software\[Manufacturer]\[ProductName]'
