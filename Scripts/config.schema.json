@@ -147,15 +147,22 @@
 								},
 								"authentication": {
 									"$id": "#/properties/systems/items/properties/endpoints/items/properties/authentication",
-									"type": "string",
-									"title": "The authentication $ref Schema",
+									"type": "object",
+									"title": "The authentication Schema",
 									"description": "Optional authentication reference",
-									"default": "",
-									"examples": [
-										"#/authentication/0"
-									],
-									"pattern": "^#/authentication/basic/([0-9]+)$",
-									"format": "json-pointer"
+									"properties": {
+										"$ref": {
+											"$id": "#/properties/systems/items/properties/endpoints/items/properties/authentication/properties/$ref",
+											"type": "string",
+											"title": "The  Authentication $ref Schema",
+											"default": "",
+											"examples": [
+												"#/authentication/basic/0"
+											],
+											"pattern": "^#/authentication/basic/([0-9]+)$",
+											"format": "json-pointer"
+										}
+									}
 								}
 							}
 						}
@@ -183,5 +190,6 @@
 				false
 			]
 		}
-	}
+	},
+	"additionalProperties": false
 }
