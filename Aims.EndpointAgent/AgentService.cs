@@ -45,7 +45,7 @@ namespace Aims.EndpointAgent
                     var agents = config.Systems.Select(
                         system => new Agent(config, system, _eventLog));
                     DisposeAgents();
-                    agents.ToArray();
+                     agents.ToArray();
                     _agents = agents;
                 }
                 catch (Exception ex)

@@ -68,11 +68,8 @@ namespace Aims.EndpointAgent
             int ix = (int)index;
             NodeRef noderefForStatPoint;
 
-            lock (_nodes)
-            {
-                endpoint = _nodes[ix].Name;
-                noderefForStatPoint = _nodes[ix].NodeRef;
-            }
+            endpoint = _nodes[ix].Name;
+            noderefForStatPoint = _nodes[ix].NodeRef;
 
             while (_isRunning)
             {
@@ -80,7 +77,7 @@ namespace Aims.EndpointAgent
 
                 try
                 {
-                    Stopwatch requestTime = new Stopwatch();
+                    var requestTime = new Stopwatch();
                     requestTime.Start();
                     string status = GetEndpointStatus(endpoint);
                     requestTime.Stop();

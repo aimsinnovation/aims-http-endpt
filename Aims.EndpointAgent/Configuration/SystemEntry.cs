@@ -14,8 +14,7 @@ namespace Aims.EndpointAgent.Configuration
         public string Token
         {
             get => _token;
-            //set => _token = value.Unprotect();
-            set => _token = value;
+            set => _token = value.Unprotect();
         }
 
         [JsonProperty("id", Required = Required.Always)]
