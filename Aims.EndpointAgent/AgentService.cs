@@ -30,8 +30,9 @@ namespace Aims.EndpointAgent
             {
                 agent.Dispose();
             }
-            _agents  = Enumerable.Empty<Agent>();
+            _agents = Enumerable.Empty<Agent>();
         }
+
         protected override void OnStart(string[] args)
         {
             lock (_lock)
@@ -42,8 +43,9 @@ namespace Aims.EndpointAgent
                         new AgentConfigurationReader<Configuration.Configuration>(AgentConstants.ConfigParameters
                             .PathToConfig).Json;
                     var agents = config.Systems.Select(
-                        system => new Agent(config, system,_eventLog));
+                        system => new Agent(config, system, _eventLog));
                     DisposeAgents();
+                     agents.ToArray();
                     _agents = agents;
                 }
                 catch (Exception ex)

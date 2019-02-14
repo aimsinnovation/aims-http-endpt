@@ -17,6 +17,6 @@ namespace Aims.EndpointAgent.Configuration
         {
             get => _password;
             set => _password = value.Unprotect();
-    }
+        }
     }
 }
