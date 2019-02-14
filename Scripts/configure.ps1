@@ -111,7 +111,7 @@ function CreateSystem([object]$system, [object]$api, [string]$environment) {
     [object]$SystemToAdd = New-Object Aims.SDK.System
     $SystemToAdd.Name = $system.name
     $SystemToAdd.AgentId = "aims.http-endpt"
-    $SystemToAdd.Version = "v1.4"
+    $SystemToAdd.Version = "v1.5"
     $SystemToAdd.EnvironmentId = $environment
     [object]$AimsSystem = $api.ForEnvironment($environment).Systems.Add($SystemToAdd)
     $token = $api.Auth.GetAgentToken($AimsSystem)
