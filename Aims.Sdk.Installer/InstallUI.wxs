@@ -20,9 +20,6 @@
       <DialogRef Id="ProgressDlg" />
       <DialogRef Id="ResumeDlg" />
       <DialogRef Id="UserExit" />
-      <DialogRef Id="CredentialsDialog" />
-      <DialogRef Id="EnvironmentDialog" />
-      <DialogRef Id="SystemDialog" />
       <DialogRef Id="UserLogonDialog" />
       <DialogRef Id="SummaryDialog" />
 
@@ -38,32 +35,15 @@
       <Publish Dialog="InstallDirDlg" Control="Next" Event="SetTargetPath" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
       <Publish Dialog="InstallDirDlg" Control="Next" Event="DoAction" Value="WixUIValidatePath" Order="2">NOT WIXUI_DONTVALIDATEPATH</Publish>
       <Publish Dialog="InstallDirDlg" Control="Next" Event="SpawnDialog" Value="InvalidDirDlg" Order="3"><![CDATA[NOT WIXUI_DONTVALIDATEPATH AND WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>
-      <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="CredentialsDialog" Order="4">WIXUI_DONTVALIDATEPATH OR WIXUI_INSTALLDIR_VALID="1"</Publish>
+      <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="UserLogonDialog" Order="4">WIXUI_DONTVALIDATEPATH OR WIXUI_INSTALLDIR_VALID="1"</Publish>
       <Publish Dialog="InstallDirDlg" Control="ChangeFolder" Property="_BrowseProperty" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
       <Publish Dialog="InstallDirDlg" Control="ChangeFolder" Event="SpawnDialog" Value="BrowseDlg" Order="2">1</Publish>
 
-      <Publish Dialog="CredentialsDialog" Control="Back" Event="NewDialog" Value="InstallDirDlg">1</Publish>
-      <Publish Dialog="CredentialsDialog" Control="Next" Event="DoAction" Value="ReadEnvironments" Order="1">1</Publish>
-      <Publish Dialog="CredentialsDialog" Control="Next" Event="NewDialog" Value="EnvironmentDialog" Order="2" ><![CDATA[AIMS_API_ERROR = ""]]></Publish>
-
-      <Publish Dialog="EnvironmentDialog" Control="Back" Event="NewDialog" Value="CredentialsDialog" Order="1">1</Publish>
-      <Publish Dialog="EnvironmentDialog" Control="Next" Event="DoAction" Value="SaveEnvironment" Order="1">1</Publish>
-      <Publish Dialog="EnvironmentDialog" Control="Next" Event="DoAction" Value="ReadSystems" Order="2">1</Publish>
-      <Publish Dialog="EnvironmentDialog" Control="Next" Event="NewDialog" Value="SystemDialog" Order="3" ><![CDATA[AIMS_API_ERROR = ""]]></Publish>
-
-      <Publish Dialog="SystemDialog" Control="Back" Event="NewDialog" Value="EnvironmentDialog" Order="1">1</Publish>
-      <Publish Dialog="SystemDialog" Control="Next" Event="DoAction" Value="SaveSystem" Order="1">1</Publish>
-      <Publish Dialog="SystemDialog" Control="Next" Event="NewDialog" Value="UserLogonDialog" Order="2" >1</Publish>
-
-      <Publish Dialog="UserLogonDialog" Control="Back" Event="NewDialog" Value="SystemDialog" Order="1">1</Publish>
+      <Publish Dialog="UserLogonDialog" Control="Back" Event="NewDialog" Value="InstallDirDlg" Order="1">1</Publish>
       <Publish Dialog="UserLogonDialog" Control="Next" Event="DoAction" Value="ValidateServiceAccount" Order="2">1</Publish>
-      <Publish Dialog="UserLogonDialog" Control="Next" Event="NewDialog" Value="PathsDialog" Order="2" ><![CDATA[AIMS_SERVICE_ACCOUNT_VALID = "1"]]></Publish>
+      <Publish Dialog="UserLogonDialog" Control="Next" Event="NewDialog" Value="SummaryDialog" Order="2" ><![CDATA[AIMS_SERVICE_ACCOUNT_VALID = "1"]]></Publish>
 
-      <Publish Dialog="PathsDialog" Control="Back" Event="NewDialog" Value="UserLogonDialog">1</Publish>
-      <Publish Dialog="PathsDialog" Control="Next" Event="DoAction" Value="ValidatePaths" Order="1">1</Publish>
-      <Publish Dialog="PathsDialog" Control="Next" Event="NewDialog" Value="SummaryDialog" Order="2"><![CDATA[AIMS_ENDPOINTS<>"" AND AIMS_ENDPOINTS_VALID="1"]]></Publish>
-
-      <Publish Dialog="SummaryDialog" Control="Back" Event="NewDialog" Value="PathsDialog" Order="1">1</Publish>
+      <Publish Dialog="SummaryDialog" Control="Back" Event="NewDialog" Value="UserLogonDialog" Order="1">1</Publish>
       <Publish Dialog="SummaryDialog" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="2" >1</Publish>
 
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="SummaryDialog" Order="1">NOT Installed</Publish>

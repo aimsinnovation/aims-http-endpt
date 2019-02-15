@@ -54,7 +54,7 @@ namespace Aims.EndpointAgent
                 },
                 new ServiceInstaller
                 {
-                    Description = "An agent to monitor the number of files created at specified paths.",
+                    Description = "AIMS HTTP agent service.",
                     DisplayName = AgentConstants.Service.ApplicationName,
                     ServiceName = AgentConstants.Service.ServiceName,
                     StartType = ServiceStartMode.Automatic,

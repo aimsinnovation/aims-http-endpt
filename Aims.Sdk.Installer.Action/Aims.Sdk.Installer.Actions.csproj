@@ -55,11 +55,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiActions.cs" />
-    <Compile Include="ParameterActions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceActions.cs" />
-    <Compile Include="UiActions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="CustomAction.config" />
