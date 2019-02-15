@@ -151,6 +151,19 @@ function GetPassword([System.Security.SecureString]$password)
     }
 }
 
+function RestartService() {
+    [string]$name = "aims-http-endpt-agent"
+    if ((Get-Service -Name $name).Status -eq 'Running')
+    {
+        Get-Service -Name $name | Stop-Service
+        Get-Service -Name $name | Start-Service
+    }
+    else
+    {
+        Get-Service -Name $name | Start-Service
+    }
+}
+
 $ErrorActionPreference = "Stop"
 
 Write-Output "Validating the config..."
@@ -185,4 +198,8 @@ if ( $null -ne $NewConfig.authentication.basic ) {
 
 Write-Output "Updating the config..."
 WriteInternalConfig -config $NewConfig
+Write-Output "Ready"
+
+Write-Output "Restarting the agent service..."
+RestartService
 Write-Output "Ready"
