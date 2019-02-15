@@ -22,7 +22,7 @@ namespace Aims.EndpointAgent
                 })
                 .ToArray();
 
-            _endpointAgent = new EndpointAgent(api, nodeRefs, config.PingTime * 1000, eventLog, config.VerboseLog);
+            _endpointAgent = new EndpointAgent(api, nodeRefs, config.PingTime * 1000, eventLog, system, config.VerboseLog);
         }
 
         public void Dispose()

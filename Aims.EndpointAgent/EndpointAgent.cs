@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Aims.EndpointAgent.Configuration;
 using Aims.Sdk;
 
 namespace Aims.EndpointAgent
@@ -17,15 +19,17 @@ namespace Aims.EndpointAgent
         private readonly int _collectionTime;
         private readonly Node[] _nodes;
         private readonly bool _verboseLog;
+        private readonly SystemEntry _system;
         private readonly BlockingCollection<StatPoint> _statCollection = new BlockingCollection<StatPoint>();
 
-        public EndpointAgent(EnvironmentApi api, NodeRef[] nodeRefs, int collectionTime, EventLog eventLog, bool verboseLog)
+        public EndpointAgent(EnvironmentApi api, NodeRef[] nodeRefs, int collectionTime, EventLog eventLog, SystemEntry system, bool verboseLog)
             : base(collectionTime, true)
         {
             _api = api;
             _collectionTime = collectionTime;
             _eventLog = eventLog;
             _verboseLog = verboseLog;
+            _system = system;
             _nodes = nodeRefs
                 .Select(r => new Node
                 {
@@ -107,13 +111,25 @@ namespace Aims.EndpointAgent
             return new StatPoint() { NodeRef = noderef, StatType = statType, Time = DateTimeOffset.Now, Value = time };
         }
 
-        private static string GetEndpointStatus(string endpoint)
+        private void AddBasicAuthHeader(WebClient client, string userName, string password)
+        {
+            string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(userName + ":" + password));
+            client.Headers[HttpRequestHeader.Authorization] = "Basic " + credentials;
+        }
+
+        private string GetEndpointStatus(string endpoint)
         {
             using (var client = new WebClient())
             {
                 try
                 {
-                    client.DownloadString(endpoint);
+                    var endpointEntry = _system.Endpoints.FirstOrDefault(n => n.Endpoint.ToString() == endpoint);
+                    if (endpointEntry.Aunthentication != null)
+                    {
+                        AddBasicAuthHeader(client, endpointEntry.Aunthentication.Login,
+                            endpointEntry.Aunthentication.Password);
+                        client.DownloadString(endpoint);
+                    }
                 }
                 catch (WebException ex)
                 {
