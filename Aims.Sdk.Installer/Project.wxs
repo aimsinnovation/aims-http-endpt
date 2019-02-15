@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Name='HTTP Endpoints Activity Agent' Id='EACE78E5-40FA-47AB-8619-43A35A32BA7A' UpgradeCode='BB441838-287F-46FA-9D23-80A9618F6E4D'
-      Language='1033' Codepage='1252' Version='1.0.0' Manufacturer='AIMS Innovation'>
+  <Product Name='HTTP Endpoints Activity Agent !(bind.fileVersion.EndpointAgentExe)' Id='EACE78E5-40FA-47AB-8619-43A35A32BA7A' UpgradeCode='BB441838-287F-46FA-9D23-80A9618F6E4D'
+      Language='1033' Codepage='1252' Version='!(bind.fileVersion.EndpointAgentExe)' Manufacturer='AIMS'>
     <Package Id='*' Keywords='Installer'
         Description="HTTP Endpoints Activity Agent Installer"
         Manufacturer='AIMS'
