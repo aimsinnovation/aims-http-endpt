@@ -32,7 +32,7 @@ param (
 )
 
 function GetInstallPath() {
-    return (Get-ItemProperty  -Path "HKLM:\SOFTWARE\AIMS Innovation\HTTP Endpoints Activity Agent").'(default)'
+    return (Get-ItemProperty  -Path "HKCU:\SOFTWARE\AIMS\HTTP Endpoints Activity Agent").'(default)'
 }
 
 function GetInternalConfig() {
