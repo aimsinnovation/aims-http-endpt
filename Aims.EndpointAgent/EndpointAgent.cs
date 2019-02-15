@@ -113,8 +113,8 @@ namespace Aims.EndpointAgent
 
         private void AddBasicAuthHeader(WebClient client, string userName, string password)
         {
-            string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(userName + ":" + password));
-            client.Headers[HttpRequestHeader.Authorization] = "Basic " + credentials;
+            string credentials = $"Basic {Convert.ToBase64String(Encoding.ASCII.GetBytes(userName + ":" + password))}";
+            client.Headers[HttpRequestHeader.Authorization] = credentials;
         }
 
         private string GetEndpointStatus(string endpoint)
@@ -128,8 +128,8 @@ namespace Aims.EndpointAgent
                     {
                         AddBasicAuthHeader(client, endpointEntry.Aunthentication.Login,
                             endpointEntry.Aunthentication.Password);
-                        client.DownloadString(endpoint);
                     }
+                    client.DownloadString(endpoint);
                 }
                 catch (WebException ex)
                 {
