@@ -28,7 +28,7 @@
 param (
     [Parameter(Mandatory=$true)] [string]$Configuration,
     [Parameter(Mandatory=$true)] [string]$Username,
-    [Parameter(Mandatory=$true)] [string]$Password
+    [Parameter(Mandatory=$true)] [SecureString]$Password
 )
 
 function GetInstallPath() {
@@ -104,20 +104,51 @@ function InjectToken([object]$system, [string]$token, [int]$id) {
     Add-Member -InputObject $system -NotePropertyValue $token -NotePropertyName 'token'
 }
 
-function CreateSystem([object]$system, [object]$api, [string]$environment) {
-    [string]$log = "Creating system '{0}'..." -f $system.name
-    Write-Host $log
+function CreateSystem([object]$system, [object]$api, [string]$environment, $existing) {
+    "Registering system '{0}'..." -f $system.name | Write-Host
 
-    [object]$SystemToAdd = New-Object Aims.SDK.System
-    $SystemToAdd.Name = $system.name
-    $SystemToAdd.AgentId = "aims.http-endpt"
-    $SystemToAdd.Version = "v1.5"
-    $SystemToAdd.EnvironmentId = $environment
-    [object]$AimsSystem = $api.ForEnvironment($environment).Systems.Add($SystemToAdd)
+    [object]$AimsSystem = $existing | Where-Object { $_.name -like $system.name }
+
+    if ($null -eq $AimsSystem) {
+        "System '{0}' not found, creating..." -f $system.name | Write-Host
+        [object]$SystemToAdd = New-Object Aims.SDK.System
+        $SystemToAdd.Name = $system.name
+        $SystemToAdd.AgentId = "aims.http-endpt"
+        $SystemToAdd.Version = "v1.5"
+        $SystemToAdd.EnvironmentId = $environment
+        $AimsSystem = $api.ForEnvironment($environment).Systems.Add($SystemToAdd)
+    } else {
+        "System '{0}' found, using existing..." -f $system.name | Write-Host
+        if ($AimsSystem -is [array]) {
+            $AimsSystem = $AimsSystem[0]
+        }
+    }
+
     $token = $api.Auth.GetAgentToken($AimsSystem)
     $ProtectedToken = Protect -data $token
     InjectToken -system $system -token $ProtectedToken -id $AimsSystem.id
     Write-Host "Ready"
+}
+
+function GetSystems([object]$api, [string]$environment) {
+    "Checking if environment '{0}' exists..." -f $environment | Write-Host
+
+    $systems = $api.ForEnvironment($environment).Systems.Get()
+    if ($null -eq $systems) {
+        throw "Environment {0} does not exist" -f $environment
+    }
+    return $systems
+}
+
+function GetPassword([System.Security.SecureString]$password)
+{
+    $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($password);
+    try {
+        return [Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstr);
+    }
+    finally {
+        [Runtime.InteropServices.Marshal]::FreeBSTR($bstr);
+    }
 }
 
 $ErrorActionPreference = "Stop"
@@ -132,7 +163,10 @@ CheckSchema -config $NewJson
 Write-Output "Loading existing config..."
 [object]$OldConfig = GetInternalConfig
 
-[object]$api = ApiInstance -endpoint $NewConfig.endpoint -usename $Username -password $Password
+[string]$PlainPassword = GetPassword -password $Password
+[object]$api = ApiInstance -endpoint $NewConfig.endpoint -usename $Username -password $PlainPassword
+
+$systems = GetSystems -api $api -environment $NewConfig.environment
 
 Write-Output "Applying changes..."
 $NewConfig.systems | ForEach-Object { 
@@ -141,7 +175,7 @@ $NewConfig.systems | ForEach-Object {
     if ( $null -ne $existing ) {
         InjectToken -system $system -token $existing.token -id $existing.id
     } else {
-        CreateSystem -system $system -api $api -environment $NewConfig.environment 
+        CreateSystem -system $system -api $api -environment $NewConfig.environment -existing $systems
     }
 }
 
