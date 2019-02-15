@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='windows-1252'?>
-<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
-    xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
-  <Product Name='HTTP Endpoints Activity Agent' Id='9514BE5B-9523-40B1-8208-6556C6022BA0' UpgradeCode='9489E3C4-00D0-421F-9776-516FC262A963'
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+    xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Product Name='HTTP Endpoints Activity Agent' Id='EACE78E5-40FA-47AB-8619-43A35A32BA7A' UpgradeCode='BB441838-287F-46FA-9D23-80A9618F6E4D'
       Language='1033' Codepage='1252' Version='1.0.0' Manufacturer='AIMS Innovation'>
     <Package Id='*' Keywords='Installer'
         Description="HTTP Endpoints Activity Agent 1.0 Installer"
@@ -76,9 +76,9 @@
 
     <Directory Id='TARGETDIR' Name='SourceDir'>
       <Directory Id='ProgramFilesFolder' Name='PFiles'>
-        <Directory Id='AIMS Innovation' Name='AIMS Innovation'>
+        <Directory Id='AIMSInnovation' Name='AIMS Innovation'>
           <Directory Id='INSTALLDIR' Name='HTTP Endpoint Activity Agent 1.0'>
-            <Component Id='MainExecutable' Guid='5A9566A2-C684-49BC-82D3-BD333D287E31'>
+            <Component Id='MainExecutable' Guid='9D3716A3-C0D9-4186-B0C5-BA7021C4B35C'>
               <File Id='EndpointAgentExe' Name='aims-http-endpt-agent.exe' DiskId='1'
                   Source='$(var.Aims.EndpointAgent.TargetPath)' KeyPath='yes' />
               <File Id='EndpointAgentExeConfig' Name='aims-http-endpt-agent.exe.config' DiskId='1'
@@ -102,7 +102,7 @@
                   Source='$(var.Aims.EndpointAgent.TargetDir)\Aims.Sdk.dll' />
               <File Id='NewtonsoftJsonDll' Name='Newtonsoft.Json.dll' DiskId='1'
                   Source='$(var.Aims.EndpointAgent.TargetDir)\Newtonsoft.Json.dll' />
-              <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="[INSTALLDIR]" KeyPath="yes"/>
+              <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="[INSTALLDIR]"/>
               <RegistryValue Id='ApiTokenRegistryValue' Root='HKLM' Key='Software\[Manufacturer]\[ProductName]'
                   Name='ApiToken' Value='[AIMS_API_TOKEN]' Type='string' />
               <RegistryValue Id='ApiEndpointRegistryValue' Root='HKLM' Key='Software\[Manufacturer]\[ProductName]'

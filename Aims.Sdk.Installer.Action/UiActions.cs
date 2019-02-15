@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
+using Microsoft.Deployment.WindowsInstaller;
 using Newtonsoft.Json;
-using WixToolset.Dtf.WindowsInstaller;
 
 namespace Aims.Sdk.Installer.Actions
 {
