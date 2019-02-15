@@ -120,6 +120,8 @@ function CreateSystem([object]$system, [object]$api, [string]$environment) {
     Write-Host "Ready"
 }
 
+$ErrorActionPreference = "Stop"
+
 Write-Output "Validating the config..."
 [string]$NewJson = Get-Content -Path $Configuration 
 
