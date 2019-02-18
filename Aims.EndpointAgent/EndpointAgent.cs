@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using Aims.EndpointAgent.Configuration;
 using Aims.Sdk;
 
 namespace Aims.EndpointAgent
@@ -14,15 +18,18 @@ namespace Aims.EndpointAgent
         private readonly EventLog _eventLog;
         private readonly int _collectionTime;
         private readonly Node[] _nodes;
-        private readonly Thread[] _workerThreads;
+        private readonly bool _verboseLog;
+        private readonly SystemEntry _system;
+        private readonly BlockingCollection<StatPoint> _statCollection = new BlockingCollection<StatPoint>();
 
-        public EndpointAgent(EnvironmentApi api, NodeRef[] nodeRefs, int collectionTime, EventLog eventLog)
+        public EndpointAgent(EnvironmentApi api, NodeRef[] nodeRefs, int collectionTime, EventLog eventLog, SystemEntry system, bool verboseLog)
             : base(collectionTime, true)
         {
             _api = api;
             _collectionTime = collectionTime;
             _eventLog = eventLog;
-            _workerThreads = new Thread[nodeRefs.Length];
+            _verboseLog = verboseLog;
+            _system = system;
             _nodes = nodeRefs
                 .Select(r => new Node
                 {
@@ -37,14 +44,14 @@ namespace Aims.EndpointAgent
             Start();
         }
 
-        protected override void Start()
+        protected sealed override void Start()
         {
             base.Start();
-        
-            for (int i = 0; i < _nodes.Length; i++)
+            var statusCheckers = new List<Task>();
+            for (var i = 0; i < _nodes.Length; i++)
             {
-                _workerThreads[i] = new Thread(CheckStatus);
-                _workerThreads[i].Start(i);
+                int nodeIndex = i;
+                statusCheckers.Add(Task.Run(() => CheckStatus(nodeIndex)));
             }
         }
 
@@ -62,12 +69,11 @@ namespace Aims.EndpointAgent
         {
             var stopwatch = new Stopwatch();
             string endpoint;
-            int ix = (int) index;
+            int ix = (int)index;
+            NodeRef noderefForStatPoint;
 
-            lock (_nodes)
-            {
-                endpoint = _nodes[ix].Name;
-            }
+            endpoint = _nodes[ix].Name;
+            noderefForStatPoint = _nodes[ix].NodeRef;
 
             while (_isRunning)
             {
@@ -75,7 +81,12 @@ namespace Aims.EndpointAgent
 
                 try
                 {
+                    var requestTime = new Stopwatch();
+                    requestTime.Start();
                     string status = GetEndpointStatus(endpoint);
+                    requestTime.Stop();
+                    _statCollection.Add(makeStatPoint(noderefForStatPoint, requestTime.ElapsedMilliseconds, AgentConstants.StatType.RequestTime));
+
                     lock (_nodes)
                     {
                         _nodes[ix].ModificationTime = DateTimeOffset.UtcNow;
@@ -84,24 +95,40 @@ namespace Aims.EndpointAgent
                 }
                 catch (Exception ex)
                 {
-                    if (Config.VerboseLog)
+                    if (_verboseLog)
                     {
-                        _eventLog.WriteEntry(String.Format("An error occurred while trying to ping endpoint {1}: {0}",
-                                                           ex, endpoint), EventLogEntryType.Error);
+                        _eventLog.WriteEntry($"An error occurred while trying to ping endpoint {endpoint}: {ex}", EventLogEntryType.Error);
                     }
                 }
 
                 long timeout = _collectionTime - stopwatch.ElapsedMilliseconds;
-                Thread.Sleep(timeout > 0 ? (int)timeout : 0);                
+                Thread.Sleep(timeout > 0 ? (int)timeout : 0);
             }
         }
 
-        private static string GetEndpointStatus(string endpoint)
+        private StatPoint makeStatPoint(NodeRef noderef, long time, string statType)
+        {
+            return new StatPoint() { NodeRef = noderef, StatType = statType, Time = DateTimeOffset.Now, Value = time };
+        }
+
+        private void AddBasicAuthHeader(WebClient client, string userName, string password)
+        {
+            string credentials = $"Basic {Convert.ToBase64String(Encoding.ASCII.GetBytes(userName + ":" + password))}";
+            client.Headers[HttpRequestHeader.Authorization] = credentials;
+        }
+
+        private string GetEndpointStatus(string endpoint)
         {
             using (var client = new WebClient())
             {
                 try
                 {
+                    var endpointEntry = _system.Endpoints.FirstOrDefault(n => n.Endpoint.ToString() == endpoint);
+                    if (endpointEntry.Aunthentication != null)
+                    {
+                        AddBasicAuthHeader(client, endpointEntry.Aunthentication.Login,
+                            endpointEntry.Aunthentication.Password);
+                    }
                     client.DownloadString(endpoint);
                 }
                 catch (WebException ex)
@@ -139,13 +166,16 @@ namespace Aims.EndpointAgent
             try
             {
                 _api.Nodes.Send(items);
+                while (_statCollection.Count > 0)
+                {
+                    _api.StatPoints.Send(new[] { _statCollection.Take() });
+                }
             }
             catch (Exception ex)
             {
-                if (Config.VerboseLog)
+                if (_verboseLog)
                 {
-                    _eventLog.WriteEntry(String.Format("An error occurred while trying to send topology: {0}", ex),
-                        EventLogEntryType.Error);
+                    _eventLog.WriteEntry($"An error occurred while trying to send topology: {ex}", EventLogEntryType.Error);
                 }
             }
         }

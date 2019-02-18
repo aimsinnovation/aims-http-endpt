@@ -1,11 +1,10 @@
 <?xml version='1.0' encoding='windows-1252'?>
-<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
-    xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
-  <Product Name='HTTP Endpoints Activity Agent 1.0' Id='9514BE5B-9523-40B1-8208-6556C6022BA0' UpgradeCode='9489E3C4-00D0-421F-9776-516FC262A963'
-      Language='1033' Codepage='1252' Version='1.0.0' Manufacturer='AIMS Innovation'>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Name='HTTP Endpoints Activity Agent !(bind.fileVersion.EndpointAgentExe)' Id='EACE78E5-40FA-47AB-8619-43A35A32BA7A' UpgradeCode='BB441838-287F-46FA-9D23-80A9618F6E4D'
+      Language='1033' Codepage='1252' Version='!(bind.fileVersion.EndpointAgentExe)' Manufacturer='AIMS'>
     <Package Id='*' Keywords='Installer'
-        Description="HTTP Endpoints Activity Agent 1.0 Installer"
-        Manufacturer='AIMS Innovation'
+        Description="HTTP Endpoints Activity Agent Installer"
+        Manufacturer='AIMS'
         InstallerVersion='200' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
 
     <Media Id='1' Cabinet='Main.cab' EmbedCab='yes' DiskPrompt="CD-ROM #1" />
@@ -13,99 +12,39 @@
 
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
 
-    <Property Id="AIMS_AGENT_ID" Secure="yes" Value="aims.http-endpt" />
-    <Property Id="AIMS_AGENT_VERSION" Secure="yes" Value="v1.0" />
     <Property Id="AIMS_SERVICE_ACCOUNT_VALID" Secure="yes" />
     <Property Id="AIMS_SERVICE_USER" Secure="yes" />
     <Property Id="AIMS_SERVICE_PASSWORD" Secure="yes" />
-    <Property Id="AIMS_EMAIL" Secure="yes" />
-    <Property Id="AIMS_PASSWORD" Secure="yes" />
-    <Property Id="AIMS_PING_TIME" Secure="yes" Value="60" />
-    <Property Id="AIMS_API_ENDPOINT" Secure="yes" Value="https://api.aimsinnovation.com">
-      <RegistrySearch Id="ApiEndpointRegistrySearch" Root="HKLM" Key="Software\[Manufacturer]\[ProductName]"
-          Name="ApiEndpoint" Type="raw" />
-    </Property>
-    <Property Id="AIMS_API_TOKEN" Secure="yes">
-      <RegistrySearch Id="ApiTokenRegistrySearch" Root="HKLM" Key="Software\[Manufacturer]\[ProductName]"
-          Name="ApiToken" Type="raw" />
-    </Property>
-    <Property Id="AIMS_ENVIRONMENT" Secure="yes" />
-    <Property Id="AIMS_ENVIRONMENT_ID" Secure="yes" />
-    <Property Id="AIMS_ENVIRONMENT_NAME" Secure="yes" />
-    <Property Id="AIMS_SYSTEM" Secure="yes" />
-    <Property Id="AIMS_SYSTEM_ID" Secure="yes" />
-    <Property Id="AIMS_SYSTEM_NAME" Secure="yes" />
-    <Property Id="AIMS_API_ERROR" Secure="yes" />
-    <Property Id="AIMS_ERROR" Secure="yes" />
-    <Property Id="AIMS_ENDPOINTS" Secure="yes" />
-    <Property Id="AIMS_ENDPOINTS_MULTILINE" Secure="yes" />
-    <Property Id="AIMS_ENDPOINTS_VALID" Secure="yes" />
 
     <EnsureTable Id="ListBox" />
 
     <Binary Id="Aims.Sdk.Installer.Actions.dll"
         SourceFile="$(var.Aims.Sdk.Installer.Actions.TargetDir)\$(var.Aims.Sdk.Installer.Actions.TargetName).CA.dll" />
 
-    <CustomAction Id="ReadEnvironments" BinaryKey="Aims.Sdk.Installer.Actions.dll"
-        DllEntry="ReadEnvironments" Execute="immediate" Return="check" />
-    <CustomAction Id="ReadSystems" BinaryKey="Aims.Sdk.Installer.Actions.dll"
-        DllEntry="ReadSystems" Execute="immediate" Return="check" />
-    <CustomAction Id="SaveEnvironment" BinaryKey="Aims.Sdk.Installer.Actions.dll"
-        DllEntry="SaveEnvironment" Execute="immediate" Return="check" />
-    <CustomAction Id="SaveSystem" BinaryKey="Aims.Sdk.Installer.Actions.dll"
-        DllEntry="SaveSystem" Execute="immediate" Return="check" />
-    <CustomAction Id="ValidatePaths" BinaryKey="Aims.Sdk.Installer.Actions.dll"
-        DllEntry="ValidatePaths" Execute="immediate" Return="check" />
     <CustomAction Id="ValidateServiceAccount" BinaryKey="Aims.Sdk.Installer.Actions.dll"
         DllEntry="ValidateServiceAccount" Execute="immediate" Return="check" />
-    <CustomAction Id="GetToken" BinaryKey="Aims.Sdk.Installer.Actions.dll"
-        DllEntry="GetToken" Execute="immediate" Return="check" />
-    <CustomAction Id="DeleteToken" BinaryKey="Aims.Sdk.Installer.Actions.dll"
-        DllEntry="DeleteToken" Execute="immediate" Return="check" />
-    <CustomAction Id="UpdateConfig" BinaryKey="Aims.Sdk.Installer.Actions.dll"
-        DllEntry="UpdateConfig" Execute="immediate" Return="check" />
-    <CustomAction Id="InstallService" BinaryKey="Aims.Sdk.Installer.Actions.dll"
-        DllEntry="InstallService" Execute="immediate" Return="check" />
-    <CustomAction Id="UninstallService" BinaryKey="Aims.Sdk.Installer.Actions.dll"
-        DllEntry="UninstallService" Execute="immediate" Return="check" />
-
-    <InstallExecuteSequence>
-      <Custom Action="GetToken" After="InstallFiles">NOT INSTALLED AND NOT REMOVE</Custom>
-      <Custom Action="DeleteToken" Before="InstallFiles">REMOVE~="ALL"</Custom>
-    </InstallExecuteSequence>
 
     <Directory Id='TARGETDIR' Name='SourceDir'>
       <Directory Id='ProgramFilesFolder' Name='PFiles'>
-        <Directory Id='AIMS Innovation' Name='AIMS Innovation'>
-          <Directory Id='INSTALLDIR' Name='HTTP Endpoint Activity Agent 1.0'>
-            <Component Id='MainExecutable' Guid='5A9566A2-C684-49BC-82D3-BD333D287E31'>
+        <Directory Id='AIMSInnovation' Name='AIMS'>
+          <Directory Id='INSTALLDIR' Name='HTTP Endpoint Activity Agent'>
+            <Component Id='MainExecutable' Guid='9D3716A3-C0D9-4186-B0C5-BA7021C4B35C'>
               <File Id='EndpointAgentExe' Name='aims-http-endpt-agent.exe' DiskId='1'
                   Source='$(var.Aims.EndpointAgent.TargetPath)' KeyPath='yes' />
               <File Id='EndpointAgentExeConfig' Name='aims-http-endpt-agent.exe.config' DiskId='1'
                   Source='$(var.Aims.EndpointAgent.TargetPath).config' />
-              <util:XmlFile Id="EndpointAgentExeConfigSetSetting1" File="[#EndpointAgentExeConfig]"
-                  Action="setValue" Name="value" SelectionLanguage="XPath" Permanent="yes" Sequence="1"
-                  ElementPath="//appSettings/add[\[]@key='api-endpoint'[\]]" Value="[AIMS_API_ENDPOINT]/api/" />
-              <util:XmlFile Id="EndpointAgentExeConfigSetSetting2" File="[#EndpointAgentExeConfig]"
-                  Action="setValue" Name="value" SelectionLanguage="XPath" Permanent="yes" Sequence="2"
-                  ElementPath="//appSettings/add[\[]@key='environment-id'[\]]" Value="[AIMS_ENVIRONMENT_ID]" />
-              <util:XmlFile Id="EndpointAgentExeConfigSetSetting3" File="[#EndpointAgentExeConfig]"
-                  Action="setValue" Name="value" SelectionLanguage="XPath" Permanent="yes" Sequence="3"
-                  ElementPath="//appSettings/add[\[]@key='token'[\]]" Value="[AIMS_API_TOKEN]" />
-              <util:XmlFile Id="EndpointAgentExeConfigSetSetting4" File="[#EndpointAgentExeConfig]"
-                  Action="setValue" Name="value" SelectionLanguage="XPath" Permanent="yes" Sequence="4"
-                  ElementPath="//appSettings/add[\[]@key='endpoints'[\]]" Value="[AIMS_ENDPOINTS]" />
-              <util:XmlFile Id="EndpointAgentExeConfigSetSetting5" File="[#EndpointAgentExeConfig]"
-                  Action="setValue" Name="value" SelectionLanguage="XPath" Permanent="yes" Sequence="5"
-                  ElementPath="//appSettings/add[\[]@key='ping-time'[\]]" Value="[AIMS_PING_TIME]" />
               <File Id='AimsSdkDll' Name='Aims.Sdk.dll' DiskId='1'
                   Source='$(var.Aims.EndpointAgent.TargetDir)\Aims.Sdk.dll' />
               <File Id='NewtonsoftJsonDll' Name='Newtonsoft.Json.dll' DiskId='1'
                   Source='$(var.Aims.EndpointAgent.TargetDir)\Newtonsoft.Json.dll' />
-              <RegistryValue Id='ApiTokenRegistryValue' Root='HKLM' Key='Software\[Manufacturer]\[ProductName]'
-                  Name='ApiToken' Value='[AIMS_API_TOKEN]' Type='string' />
-              <RegistryValue Id='ApiEndpointRegistryValue' Root='HKLM' Key='Software\[Manufacturer]\[ProductName]'
-                  Name='ApiEndpoint' Value='[AIMS_API_ENDPOINT]' Type='string' />
+              <File Id='config.schema.json' Name='config.schema.json' DiskId='1'
+                    Source='$(var.SolutionDir)\Scripts\config.schema.json' />
+              <File Id='configure.ps1' Name='configure.ps1' DiskId='1'
+                    Source='$(var.SolutionDir)\Scripts\configure.ps1' />
+              <File Id='sample.config.json' Name='sample.config.json' DiskId='1'
+                    Source='$(var.SolutionDir)\Scripts\sample.config.json' />
+              <File Id='agent.config' Name='agent.config' DiskId='1'
+                    Source='$(var.SolutionDir)\Scripts\agent.config' />
               <ServiceInstall Id="EndpointAgentServiceInstaller" Type="ownProcess"
                   Name="aims-http-endpt-agent" DisplayName="AIMS HTTP Endpoints Agent"
                   Start="auto" Account="[AIMS_SERVICE_USER]" Password="[AIMS_SERVICE_PASSWORD]"
@@ -116,12 +55,30 @@
           </Directory>
         </Directory>
       </Directory>
+      <Directory Id="LocalAppDataFolder">
+        <Directory Id="aims.appdata" Name="aims">
+          <Component Id='aims.appdata.c' Guid='0B766012-EA54-4C41-A01F-69CC9F7E8A3C'>
+            <RemoveFolder Id="aims.appdata" On="uninstall" />
+            <RegistryValue Root="HKCU" Key="Software\AIMS\HTTP Endpoints Activity Agent" Type="string" Value="[INSTALLDIR]" KeyPath="yes" />
+          </Component>
+          <Directory Id="httpagent.appdata" Name="httpagent">
+            <Component Id='configuration.appdata' Guid='79A8F71B-B722-4000-903F-39FD04707022'>
+              <File Id='agent.config.appdata' Name='agent.config' DiskId='1'
+                  Source='$(var.SolutionDir)\Scripts\agent.config'/>
+              <RegistryValue Root="HKCU" Key="Software\AIMS\HTTP Endpoints Activity Agent" Type="string" Value="[INSTALLDIR]" KeyPath="yes" />
+              <RemoveFolder Id="httpagent.appdata" On="uninstall" />
+            </Component>
+          </Directory>
+        </Directory>
+      </Directory>
     </Directory>
 
-    <Feature Id='Complete' Title='HTTP Endpoints Activity Agent 1.0' Description='The complete package.'
+    <Feature Id='Complete' Title='HTTP Endpoints Activity Agent' Description='The complete package.'
         Display='expand' Level='1' ConfigurableDirectory='INSTALLDIR'>
       <Feature Id='MainProgram' Title='Program' Description='The main executable.' Level='1'>
         <ComponentRef Id='MainExecutable' />
+        <ComponentRef Id='aims.appdata.c' />
+        <ComponentRef Id='configuration.appdata' />
       </Feature>
     </Feature>
 

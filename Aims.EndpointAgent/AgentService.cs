@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.ServiceProcess;
 using Env = System.Environment;
 
@@ -9,12 +11,11 @@ namespace Aims.EndpointAgent
     {
         private readonly EventLog _eventLog;
         private readonly object _lock = new object();
-        private Agent _agent;
+        private IEnumerable<Agent> _agents = Enumerable.Empty<Agent>();
 
         public AgentService()
         {
             InitializeComponent();
-
             _eventLog = new EventLog(AgentConstants.Service.Log) { Source = AgentConstants.Service.EventSource };
         }
 
@@ -23,20 +24,33 @@ namespace Aims.EndpointAgent
             OnStart(new string[0]);
         }
 
+        private void DisposeAgents()
+        {
+            foreach (var agent in _agents)
+            {
+                agent.Dispose();
+            }
+            _agents = Enumerable.Empty<Agent>();
+        }
+
         protected override void OnStart(string[] args)
         {
             lock (_lock)
             {
-                if (_agent != null) return;
-
                 try
                 {
-                    _agent = new Agent(new Uri(Config.ApiEndPoint), Config.EnvironmentId, Config.Token, Config.PingTime, _eventLog);
+                    var config =
+                        new AgentConfigurationReader<Configuration.Configuration>(AgentConstants.ConfigParameters
+                            .PathToConfig).Json;
+                    var agents = config.Systems.Select(
+                        system => new Agent(config, system, _eventLog));
+                    DisposeAgents();
+                     agents.ToArray();
+                    _agents = agents;
                 }
                 catch (Exception ex)
                 {
-                    _eventLog.WriteEntry(String.Format("Failed to start the agent:{0}{1}", Env.NewLine, ex),
-                        EventLogEntryType.Error);
+                    _eventLog.WriteEntry($"Failed to start the agent:{Env.NewLine}{ex}", EventLogEntryType.Error);
                 }
             }
         }
@@ -45,18 +59,14 @@ namespace Aims.EndpointAgent
         {
             lock (_lock)
             {
-                if (_agent == null) return;
-
                 try
                 {
-                    _agent.Dispose();
+                    DisposeAgents();
                 }
                 catch (Exception ex)
                 {
-                    _eventLog.WriteEntry(String.Format("Failed to stop the agent:{0}{1}", Env.NewLine, ex),
-                        EventLogEntryType.Error);
+                    _eventLog.WriteEntry($"Failed to stop the agent:{Env.NewLine}{ex}", EventLogEntryType.Error);
                 }
-                _agent = null;
             }
         }
 

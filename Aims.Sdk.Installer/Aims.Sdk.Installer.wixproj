@@ -6,11 +6,13 @@
     <ProductVersion>3.9</ProductVersion>
     <ProjectGuid>c213d3cf-238d-4904-a497-65afd03ac731</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>AIMS File Count Agent</OutputName>
+    <OutputName>AIMS HTTP Endpoint Agent</OutputName>
     <OutputType>Package</OutputType>
-    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\WiX Toolset\v4\Wix.targets</WixTargetsPath>
-    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\WiX Toolset\v4\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <Name>Aims.Sdk.Installer</Name>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -22,13 +24,10 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CredentialsDialog.wxs" />
-    <Compile Include="EnvironmentDialog.wxs" />
     <Compile Include="InstallUI.wxs" />
     <Compile Include="PathsDialog.wxs" />
     <Compile Include="Project.wxs" />
     <Compile Include="SummaryDialog.wxs" />
-    <Compile Include="SystemDialog.wxs" />
     <Compile Include="UserLogonDialog.wxs" />
   </ItemGroup>
   <ItemGroup>
