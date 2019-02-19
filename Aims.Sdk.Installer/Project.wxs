@@ -41,6 +41,8 @@
                     Source='$(var.SolutionDir)\Scripts\config.schema.json' />
               <File Id='configure.ps1' Name='configure.ps1' DiskId='1'
                     Source='$(var.SolutionDir)\Scripts\configure.ps1' />
+              <File Id='configure.ps5.ps1' Name='configure.ps5.ps1' DiskId='1'
+                    Source='$(var.SolutionDir)\Scripts\configure.ps5.ps1' />
               <File Id='sample.config.json' Name='sample.config.json' DiskId='1'
                     Source='$(var.SolutionDir)\Scripts\sample.config.json' />
               <File Id='agent.config' Name='agent.config' DiskId='1'
@@ -52,7 +54,23 @@
               <ServiceControl Id="EndpointAgentServiceStart" Name="aims-http-endpt-agent"
                   Start="install" Stop="uninstall" Remove="uninstall" Wait="yes" />
             </Component>
-          </Directory>
+            <Directory Id='ps5' Name='ps5'>
+              <Component Id='ps5dependencied' Guid='5BB7E64A-D2F1-4371-ADC3-69540BC9A6E8'>
+                <File Id='AimsSdkDllps5' Name='Aims.Sdk.dll' DiskId='1'
+                      Source='$(var.Aims.EndpointAgent.TargetDir)\Aims.Sdk.dll' />
+                <File Id='NewtonsoftJsonDllv9' Name='Newtonsoft.Json.dll' DiskId='1'
+                      Source='$(var.SolutionDir)\Scripts\ps5\Newtonsoft.Json.dll' />
+              </Component>
+              <Directory Id='schema' Name='schema'>
+                <Component Id='ps5schemadependencied' Guid='5FEF4756-1B3F-4623-8D15-1AB95EFAF5EB'>
+                  <File Id='NewtonsoftJsonDllv11' Name='Newtonsoft.Json.dll' DiskId='1'
+                        Source='$(var.SolutionDir)\Scripts\ps5\schema\Newtonsoft.Json.dll' />
+                  <File Id='NewtonsoftJsonSchemaDllv3' Name='Newtonsoft.Json.Schema.dll' DiskId='1'
+                        Source='$(var.SolutionDir)\Scripts\ps5\schema\Newtonsoft.Json.Schema.dll' />
+                </Component>
+              </Directory>
+            </Directory>
+            </Directory>
         </Directory>
       </Directory>
       <Directory Id="LocalAppDataFolder">
@@ -79,6 +97,8 @@
         <ComponentRef Id='MainExecutable' />
         <ComponentRef Id='aims.appdata.c' />
         <ComponentRef Id='configuration.appdata' />
+        <ComponentRef Id='ps5schemadependencied' />
+        <ComponentRef Id='ps5dependencied' />
       </Feature>
     </Feature>
 
