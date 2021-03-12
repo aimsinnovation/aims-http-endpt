@@ -15,7 +15,12 @@
     <Property Id="AIMS_SERVICE_ACCOUNT_VALID" Secure="yes" />
     <Property Id="AIMS_SERVICE_USER" Secure="yes" />
     <Property Id="AIMS_SERVICE_PASSWORD" Secure="yes" />
-
+    <?if $(var.Configuration) = ReleaseUs ?>
+      <?define AimsConfigPostfix="us."?>
+    <?else?>
+      <?define AimsConfigPostfix=""?>
+    <?endif?>
+    <?warning Using "$(var.AimsConfigPostfix)" postfix?>
     <EnsureTable Id="ListBox" />
 
     <Binary Id="Aims.Sdk.Installer.Actions.dll"
@@ -38,15 +43,15 @@
               <File Id='NewtonsoftJsonDll' Name='Newtonsoft.Json.dll' DiskId='1'
                   Source='$(var.Aims.EndpointAgent.TargetDir)\Newtonsoft.Json.dll' />
               <File Id='config.schema.json' Name='config.schema.json' DiskId='1'
-                    Source='$(var.SolutionDir)\Scripts\config.schema.json' />
+                    Source='$(var.SolutionDir)\Scripts\config.schema.$(var.AimsConfigPostfix)json' />
               <File Id='configure.ps1' Name='configure.ps1' DiskId='1'
                     Source='$(var.SolutionDir)\Scripts\configure.ps1' />
               <File Id='configure.ps5.ps1' Name='configure.ps5.ps1' DiskId='1'
                     Source='$(var.SolutionDir)\Scripts\configure.ps5.ps1' />
               <File Id='sample.config.json' Name='sample.config.json' DiskId='1'
-                    Source='$(var.SolutionDir)\Scripts\sample.config.json' />
+                    Source='$(var.SolutionDir)\Scripts\sample.config.$(var.AimsConfigPostfix)json' />
               <File Id='agent.config' Name='agent.config' DiskId='1'
-                    Source='$(var.SolutionDir)\Scripts\agent.config' />
+                    Source='$(var.SolutionDir)\Scripts\agent.$(var.AimsConfigPostfix)config' />
               <ServiceInstall Id="EndpointAgentServiceInstaller" Type="ownProcess"
                   Name="aims-http-endpt-agent" DisplayName="AIMS HTTP Endpoints Agent"
                   Start="auto" Account="[AIMS_SERVICE_USER]" Password="[AIMS_SERVICE_PASSWORD]"
