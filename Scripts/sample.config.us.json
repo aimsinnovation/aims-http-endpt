@@ -1,0 +1,48 @@
+{
+	"endpoint": "https://api-us.aimsinnovation.com/api/",
+	"environment": "cca2fd0a-54aa-4062-b4b0-b81f76628b95",
+	"authentication": {
+    "basic": [
+      {
+        "name": "httpbin simple password",
+        "login": "simple",
+        "password": "password"
+      },
+      {
+        "name": "httpbin long password",
+        "login": "superlong",
+        "password": "superlongcrypticpassword1"
+      }
+    ]
+	},
+  "systems": [
+    {
+      "name": "simple request",
+      "endpoints": [
+        {
+          "endpoint": "http://httpbin.org/get?plain"
+        },
+        {
+          "endpoint": "https://httpbin.org/get?https"
+        }
+      ]
+    },
+    {
+      "name": "authorization",
+      "endpoints": [
+        {
+          "endpoint": "https://httpbin.org/basic-auth/simple/password",
+          "authentication": {
+            "$ref": "#/authentication/basic/0"
+          }
+        },
+        {
+          "endpoint": "http://httpbin.org/basic-auth/superlong/superlongcrypticpassword1",
+          "authentication": {
+            "$ref": "#/authentication/basic/1"
+          }
+        }
+      ]
+    }
+  ]
+}
